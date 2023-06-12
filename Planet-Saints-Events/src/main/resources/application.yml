@@ -7,6 +7,15 @@ spring:
       max-wait-millis: 30000
       validation-query: SELECT 1
       validation-query-timeout: 30
+  application:
+    name: planet-saints-events
+  cloud:
+    config:
+      import-check:
+        enabled: false
+  h2:
+    console:
+      enabled: true
   jpa:
     hibernate:
       ddl-auto: update
@@ -18,6 +27,7 @@ spring:
             non_contextual_creation: true
         id:
           new_generator_mappings: true
+    show-sql: true
 server:
   port : 8081
 eureka:

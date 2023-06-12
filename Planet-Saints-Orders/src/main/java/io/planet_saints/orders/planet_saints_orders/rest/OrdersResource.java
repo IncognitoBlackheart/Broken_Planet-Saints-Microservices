@@ -4,24 +4,20 @@ import io.planet_saints.orders.planet_saints_orders.domain.Orders;
 import io.planet_saints.orders.planet_saints_orders.model.OrdersDTO;
 import io.planet_saints.orders.planet_saints_orders.service.OrdersService;
 import jakarta.validation.Valid;
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
 @RequestMapping(value = "/api/orderss", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OrdersResource {
 
+    @Autowired
     private final OrdersService ordersService;
 
     public OrdersResource(final OrdersService ordersService) {
@@ -40,8 +36,8 @@ public class OrdersResource {
 
     @PostMapping
     public ResponseEntity<Orders> createOrders(@RequestBody @Valid final OrdersDTO ordersDTO) {
-        final Orders createdId = ordersService.create(ordersDTO);
-        return new ResponseEntity<>(createdId, HttpStatus.CREATED);
+        final Orders createdOrder = ordersService.create(ordersDTO);
+        return new ResponseEntity<>(createdOrder, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

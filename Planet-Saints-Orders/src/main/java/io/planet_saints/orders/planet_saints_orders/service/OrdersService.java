@@ -1,21 +1,32 @@
 package io.planet_saints.orders.planet_saints_orders.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.planet_saints.orders.planet_saints_orders.domain.Orders;
+import io.planet_saints.orders.planet_saints_orders.eventsModels.EventsModel;
+import io.planet_saints.orders.planet_saints_orders.eventsModels.EventsClient;
 import io.planet_saints.orders.planet_saints_orders.model.OrdersDTO;
 import io.planet_saints.orders.planet_saints_orders.repos.OrdersRepository;
 import io.planet_saints.orders.planet_saints_orders.util.NotFoundException;
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
 public class OrdersService {
 
     private final OrdersRepository ordersRepository;
+    @Autowired
+    private EventsClient eventsClient;
+    private final ObjectMapper objectMapper;
 
-    public OrdersService(final OrdersRepository ordersRepository) {
+
+    public OrdersService(final OrdersRepository ordersRepository, EventsClient eventsClient, ObjectMapper objectMapper) {
         this.ordersRepository = ordersRepository;
+        this.eventsClient = eventsClient;
+        this.objectMapper = objectMapper;
     }
 
     public List<OrdersDTO> findAll() {
@@ -34,7 +45,14 @@ public class OrdersService {
     public Orders create(final OrdersDTO ordersDTO) {
         final Orders orders = new Orders();
         mapToEntity(ordersDTO, orders);
-        return ordersRepository.save(orders);
+        Orders savedOrder = ordersRepository.save(orders);
+        EventsModel event = new EventsModel();
+        event.setOrderId(savedOrder.getId());
+        event.setMessage("Customer " + savedOrder.getCustomerName() + " asked for the order "
+                + savedOrder.getOrder());
+
+        eventsClient.createEvent(event);
+        return savedOrder;
     }
 
     public void update(final Long id, final OrdersDTO ordersDTO) {

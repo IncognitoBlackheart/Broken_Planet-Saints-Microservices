@@ -4,9 +4,10 @@ import io.planet_saints.events.planet_saints_events.domain.Events;
 import io.planet_saints.events.planet_saints_events.model.EventsDTO;
 import io.planet_saints.events.planet_saints_events.repos.EventsRepository;
 import io.planet_saints.events.planet_saints_events.util.NotFoundException;
-import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
@@ -31,11 +32,11 @@ public class EventsService {
                 .orElseThrow(NotFoundException::new);
     }
 
-    public Long create(final EventsDTO eventsDTO) {
+    public Events create(final EventsDTO eventsDTO) {
         final Events events = new Events();
         mapToEntity(eventsDTO, events);
 
-        return eventsRepository.save(events).getId();
+        return eventsRepository.save(events);
     }
 
     public void update(final Long id, final EventsDTO eventsDTO) {
