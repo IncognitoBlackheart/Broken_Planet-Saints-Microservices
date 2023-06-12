@@ -1,9 +1,8 @@
 package io.planet_saints.orders.planet_saints_orders.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.planet_saints.orders.planet_saints_orders.domain.Orders;
-import io.planet_saints.orders.planet_saints_orders.eventsModels.EventsModel;
 import io.planet_saints.orders.planet_saints_orders.eventsModels.EventsClient;
+import io.planet_saints.orders.planet_saints_orders.eventsModels.EventsModel;
 import io.planet_saints.orders.planet_saints_orders.model.OrdersDTO;
 import io.planet_saints.orders.planet_saints_orders.repos.OrdersRepository;
 import io.planet_saints.orders.planet_saints_orders.util.NotFoundException;
@@ -20,13 +19,10 @@ public class OrdersService {
     private final OrdersRepository ordersRepository;
     @Autowired
     private EventsClient eventsClient;
-    private final ObjectMapper objectMapper;
 
-
-    public OrdersService(final OrdersRepository ordersRepository, EventsClient eventsClient, ObjectMapper objectMapper) {
+    public OrdersService(final OrdersRepository ordersRepository, EventsClient eventsClient) {
         this.ordersRepository = ordersRepository;
         this.eventsClient = eventsClient;
-        this.objectMapper = objectMapper;
     }
 
     public List<OrdersDTO> findAll() {
